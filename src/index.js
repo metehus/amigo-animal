@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as ReactDOMClient from "react-dom/client";
-import { Box, Button, Center, ChakraProvider, Image } from "@chakra-ui/react";
+import { Box, Button, Center, ChakraProvider, Code, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure } from "@chakra-ui/react";
 import ReactGA from "react-ga4";
 
 ReactGA.initialize("G-YDSW985FVQ");
@@ -8,6 +8,8 @@ ReactGA.initialize("G-YDSW985FVQ");
 const id = window.location.pathname.slice(1);
 
 function App() {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
   React.useEffect(() => {
     ReactGA.event({
       category: "acesso",
@@ -22,6 +24,15 @@ function App() {
       action: ref,
       label: id ?? "desconhecido"
     });
+  }
+
+  function openModal() {
+    ReactGA.event({
+      category: "click",
+      action: 'pix',
+      label: id ?? "desconhecido"
+    });
+    onOpen()
   }
 
   return (
@@ -66,7 +77,27 @@ function App() {
       >
         Doar via PicPay
       </Button>
-      <Button colorScheme="yellow">Doar via PIX</Button>
+      <Button onClick={openModal} colorScheme="yellow">Doar via PIX</Button>
+
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Doar via PIX</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Image src="/qrcode-pix.png" />
+
+            <Code w="100%">00020126360014BR.GOV.BCB.PIX0114040862380001325204000053039865802BR5912Amigo Animal6008Curitiba62210517AMIGOANIMALCARTAZ6304CFB0</Code>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme='yellow' mr={3} onClick={onClose}>
+              Fechar
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Center>
   );
 }
