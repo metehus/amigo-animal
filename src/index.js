@@ -5,7 +5,7 @@ import ReactGA from "react-ga4";
 
 ReactGA.initialize("G-YDSW985FVQ");
 
-const id = window.location.hash.slice(1);
+const id = window.location.pathname.slice(1);
 
 function App() {
   React.useEffect(() => {
